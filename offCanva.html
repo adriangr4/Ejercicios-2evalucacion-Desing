@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Off Canvas Menu</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            padding: 0 20px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            /* Fix navbar to top */
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #hamburger {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 20px;
+            padding: 5px;
+        }
+
+        /* Main Layout Container */
+        .layout-container {
+            display: flex;
+            margin-top: 60px;
+            /* Space for fixed navbar */
+            min-height: calc(100vh - 60px);
+            position: relative;
+        }
+
+        /* Sidebar (Off-Canvas) */
+        .sidebar {
+            background-color: #f4f4f4;
+            width: 250px;
+            position: fixed;
+            top: 60px;
+            /* Below navbar */
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            /* Hidden by default on mobile */
+            transition: transform 0.3s ease-in-out;
+            z-index: 900;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+            /* Show when open */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            width: 100%;
+            /* Full width */
+        }
+
+        /* Overlay for mobile when menu is open */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 800;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Desktop Styles (min-width: 768px) */
+        @media (min-width: 768px) {
+            #hamburger {
+                display: none;
+                /* Hide hamburger */
+            }
+
+            .sidebar {
+                position: static;
+                /* Flow naturally */
+                transform: none;
+                /* Always visible */
+                height: auto;
+                box-shadow: none;
+                border-right: 1px solid #eee;
+            }
+
+            .overlay {
+                display: none !important;
+                /* Never show overlay on desktop */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <button id="hamburger" aria-label="Abrir menú">&#9776;</button>
+        <h1>Mi Sitio Web</h1>
+    </nav>
+
+    <!-- Overlay for mobile click-to-close -->
+    <div id="overlay" class="overlay"></div>
+
+    <div class="layout-container">
+        <aside id="sidebar" class="sidebar">
+            <h2>Información</h2>
+            <p>Esta es la información oculta que aparece con el botón de hamburguesa en móviles.</p>
+            <ul>
+                <li>Opción 1</li>
+                <li>Opción 2</li>
+                <li>Opción 3</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h2>Contenido Principal</h2>
+            <p>Aquí va el contenido principal de la página. En escritorio, la barra lateral se ve a la izquierda. En
+                móvil, está oculta hasta que pulsas el botón.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua.</p>
+        </main>
+    </div>
+
+    <script src="./hammer.min.js"></script>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleMenu() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu); // Close when clicking overlay
+    </script>
+</body>
+
+</html>
